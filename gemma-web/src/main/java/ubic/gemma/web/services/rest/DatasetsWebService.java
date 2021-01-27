@@ -41,6 +41,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
@@ -453,7 +454,7 @@ public class DatasetsWebService extends
                 throw new GemmaApiException( errorBody );
             }
 
-            return Response.ok( Files.readAllBytes( file.toPath() ) )
+            return Response.ok( new FileInputStream( file ) )
                     .header( "Content-Disposition", "attachment; filename=" + file.getName() ).build();
         } catch ( IOException e ) {
             WellComposedErrorBody errorBody = new WellComposedErrorBody( Response.Status.NOT_FOUND,
