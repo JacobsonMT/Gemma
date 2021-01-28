@@ -1,8 +1,8 @@
 /*
  * The Gemma project.
- * 
+ *
  * Copyright (c) 2006-2007 University of British Columbia
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,14 +18,19 @@
  */
 package ubic.gemma.persistence.service.analysis.expression.diff;
 
+import ubic.gemma.model.analysis.AnalysisResultSetDao;
 import ubic.gemma.model.analysis.expression.diff.DifferentialExpressionAnalysis;
+import ubic.gemma.model.analysis.expression.diff.DifferentialExpressionAnalysisResult;
 import ubic.gemma.model.analysis.expression.diff.ExpressionAnalysisResultSet;
-import ubic.gemma.persistence.service.BaseDao;
+import ubic.gemma.model.analysis.expression.diff.ExpressionAnalysisResultSetValueObject;
+import ubic.gemma.model.expression.bioAssay.BioAssay;
+
+import java.util.Collection;
 
 /**
  * @see ExpressionAnalysisResultSet
  */
-public interface ExpressionAnalysisResultSetDao extends BaseDao<ExpressionAnalysisResultSet> {
+public interface ExpressionAnalysisResultSetDao extends AnalysisResultSetDao<DifferentialExpressionAnalysisResult, ExpressionAnalysisResultSet, ExpressionAnalysisResultSetValueObject> {
 
     ExpressionAnalysisResultSet thaw( ExpressionAnalysisResultSet resultSet );
 
@@ -39,5 +44,4 @@ public interface ExpressionAnalysisResultSetDao extends BaseDao<ExpressionAnalys
     DifferentialExpressionAnalysis thawFully( DifferentialExpressionAnalysis differentialExpressionAnalysis );
 
     ExpressionAnalysisResultSet thawWithoutContrasts( ExpressionAnalysisResultSet resultSet );
-
 }

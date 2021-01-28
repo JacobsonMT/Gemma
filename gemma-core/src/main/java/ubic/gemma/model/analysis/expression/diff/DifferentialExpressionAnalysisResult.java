@@ -18,6 +18,7 @@
  */
 package ubic.gemma.model.analysis.expression.diff;
 
+import ubic.gemma.model.analysis.AnalysisResult;
 import ubic.gemma.model.common.Identifiable;
 import ubic.gemma.model.expression.designElement.CompositeSequence;
 
@@ -31,7 +32,7 @@ import java.util.HashSet;
  * associated contrasts.
  */
 @SuppressWarnings({ "unused", "WeakerAccess" }) // Possible external use
-public class DifferentialExpressionAnalysisResult implements Identifiable, Serializable {
+public class DifferentialExpressionAnalysisResult extends AnalysisResult implements Serializable {
     /**
      * The serial version UID of this class. Needed for serialization.
      */

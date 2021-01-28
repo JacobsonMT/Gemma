@@ -20,24 +20,30 @@ package ubic.gemma.persistence.service.analysis.expression.diff;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.hibernate.*;
+import org.hibernate.criterion.Restrictions;
 import org.openjena.atlas.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ubic.gemma.model.analysis.expression.diff.DifferentialExpressionAnalysis;
 import ubic.gemma.model.analysis.expression.diff.DifferentialExpressionAnalysisResult;
 import ubic.gemma.model.analysis.expression.diff.ExpressionAnalysisResultSet;
+import ubic.gemma.model.analysis.expression.diff.ExpressionAnalysisResultSetValueObject;
+import ubic.gemma.model.expression.bioAssay.BioAssay;
 import ubic.gemma.model.expression.experiment.ExperimentalFactor;
 import ubic.gemma.persistence.service.AbstractDao;
+import ubic.gemma.persistence.service.AbstractVoEnabledDao;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Paul
  */
 @Repository
-public class ExpressionAnalysisResultSetDaoImpl extends AbstractDao<ExpressionAnalysisResultSet>
+public class ExpressionAnalysisResultSetDaoImpl extends AbstractVoEnabledDao<ExpressionAnalysisResultSet, ExpressionAnalysisResultSetValueObject>
         implements ExpressionAnalysisResultSetDao {
 
     @Autowired
@@ -183,4 +189,43 @@ public class ExpressionAnalysisResultSetDaoImpl extends AbstractDao<ExpressionAn
         super.remove( resultSet );
         this.getSessionFactory().getCurrentSession().flush();
     }
+
+    @Override
+    public ExpressionAnalysisResultSetValueObject loadValueObject( ExpressionAnalysisResultSet entity ) {
+        return new ExpressionAnalysisResultSetValueObject( entity );
+    }
+
+    @Override
+    public Collection<ExpressionAnalysisResultSetValueObject> loadValueObjects( Collection<ExpressionAnalysisResultSet> entities ) {
+        return entities.stream()
+                .map( ExpressionAnalysisResultSetValueObject::new )
+                .collect( Collectors.toList() );
+    }
+
+    @Override
+    public Collection<ExpressionAnalysisResultSet> findByDatasetInAndExternalIdsLimit( Collection<BioAssay> bioAssays, Collection<String> externalIds, int limit ) {
+        Criteria query = this.getSessionFactory().getCurrentSession()
+                .createCriteria( ExpressionAnalysisResultSet.class )
+                .createAlias( "analysis", "a" );
+
+        if ( bioAssays != null ) {
+            if ( bioAssays.isEmpty() ) {
+                log.warn( "No datasets were provided to filter this search, returning an empty collection." );
+                return Collections.emptyList();
+            }
+            query = query.add( Restrictions.in( "a.experimentAnalyzed", bioAssays ) );
+        }
+
+        if ( externalIds != null ) {
+            // TODO
+            if ( externalIds.isEmpty() ) {
+                log.warn( "No external identifiers were provided to filter this search, returning an empty collection." );
+                return Collections.emptyList();
+            }
+            query = query.add( Restrictions.in( "a.externalIds", externalIds ) );
+        }
+
+        return ( List<ExpressionAnalysisResultSet> ) query.list();
+    }
+
 }
