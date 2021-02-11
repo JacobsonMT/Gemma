@@ -127,6 +127,21 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.1.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>3.2.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-ehcache</artifactId>
 			<version>${hibernate.version}</version>
 			<exclusions>
@@ -534,6 +549,7 @@
 		<spring.security.version>3.1.4.RELEASE</spring.security.version>
 		<hibernate.version>3.6.7.Final</hibernate.version>
 		<ehcache.version>2.6.6</ehcache.version>
+		<jersey.version>2.33</jersey.version>
 		<tomcat.version>8.5.60</tomcat.version>
 	</properties>
 </project>
